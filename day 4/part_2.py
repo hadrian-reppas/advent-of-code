@@ -1,4 +1,4 @@
-from aoc_4_1 import board
+from part_1 import board
 
 def go(boards, n):
     i = 0
@@ -8,7 +8,7 @@ def go(boards, n):
         else:
             i += 1
 
-nums, boards = board.parse('aoc_4.txt')
+nums, boards = board.parse('input.txt')
 
 nit = iter(nums)
 

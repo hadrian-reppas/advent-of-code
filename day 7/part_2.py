@@ -4,7 +4,7 @@ def dist(nums, n):
 def triangle(n):
     return n*(n + 1)//2
 
-nums = [int(n) for n in next(open('aoc_7.txt')).split(',')]
+nums = [int(n) for n in next(open('input.txt')).split(',')]
 
 min_fuel = float('inf')
 for i in range(1877):

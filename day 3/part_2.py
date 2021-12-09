@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_3.txt'))
+inp = ''.join(open('input.txt'))
 lines = inp.split('\n')
 
 bit = 0

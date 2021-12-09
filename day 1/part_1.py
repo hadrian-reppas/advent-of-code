@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_1.txt'))
+inp = ''.join(open('input.txt'))
 
 nums = list(map(int, inp.split('\n')))
 count = 0

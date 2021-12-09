@@ -29,7 +29,7 @@ class board:
         return nums, boards
 
 def main():
-    nums, boards = board.parse('aoc_4.txt')
+    nums, boards = board.parse('input.txt')
 
     for n in nums:
         for b in boards:

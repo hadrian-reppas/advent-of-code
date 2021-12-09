@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_3.txt'))
+inp = ''.join(open('input.txt'))
 
 counts = [0]*12
 n = 0

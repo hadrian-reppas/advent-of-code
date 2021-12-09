@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_5.txt'))
+inp = ''.join(open('input.txt'))
 lines = [[[int(x) for x in pt.split(',')] for pt in line.split(' -> ')] for line in inp.split('\n')]
 
 grid = [[0 for _ in range(1000)] for _ in range(1000)]

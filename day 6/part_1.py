@@ -5,13 +5,13 @@ def step(arr):
     arr[6] += zeros
     arr[8] = zeros
 
-nums = map(int, next(open('aoc_6.txt')).split(','))
+nums = map(int, next(open('input.txt')).split(','))
 
 arr = [0]*9
 for n in nums:
     arr[n] += 1
 
-for _ in range(256):
+for _ in range(80):
     step(arr)
 
 print(sum(arr))

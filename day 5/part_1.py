@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_5.txt'))
+inp = ''.join(open('input.txt'))
 ls = [[[int(x) for x in pt.split(',')] for pt in line.split(' -> ')] for line in inp.split('\n')]
 lines = [l for l in ls if l[0][0] == l[1][0] or l[0][1] == l[1][1]]
 

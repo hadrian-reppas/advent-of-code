@@ -1,4 +1,4 @@
-inp = ''.join(open('aoc_2.txt'))
+inp = ''.join(open('input.txt'))
 
 x = y = aim = 0
 
