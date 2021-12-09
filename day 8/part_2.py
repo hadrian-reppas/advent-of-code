@@ -19,7 +19,7 @@ def decode(left, right):
     mapping = get_mapping(left)
     return get_val(mapping, right)
 
-inp = ''.join(open('aoc_8.txt'))
+inp = ''.join(open('input.txt'))
 lines = [(line.split(' | ')[0].split(' '), line.split(' | ')[1].split(' ')) for line in inp.split('\n')]
 
 print(sum(decode(left, right) for left, right in lines))
