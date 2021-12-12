@@ -1,6 +1,6 @@
 inp = ''.join(open('input.txt'))
 
-nums = list(map(int, inp.split('\n')))
+nums = [int(n) for n in inp.split('\n')]
 count = 0
 
 for i in range(len(nums) - 1):
