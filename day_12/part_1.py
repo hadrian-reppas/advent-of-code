@@ -1,8 +1,6 @@
-import networkx as nx
-
 def count(G, v, visited):
     x = 0
-    for n in G.neighbors(v):
+    for n in G[v]:
         if n == 'end':
             x += 1
         elif n not in visited:
@@ -16,8 +14,9 @@ def count(G, v, visited):
 inp = ''.join(open('input.txt'))
 edges = [line.split('-') for line in inp.split('\n')]
 
-G = nx.Graph()
+G = {n: set() for n in sum(edges, [])}
 for u, v in edges:
-    G.add_edge(u, v)
+    G[u].add(v)
+    G[v].add(u)
 
 print(count(G, 'start', set()))
