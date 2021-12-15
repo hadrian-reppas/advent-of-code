@@ -3,7 +3,7 @@ from part_1 import *
 def print_arr(arr):
     for row in arr:
         for x in row:
-            print('#' if x else ' ', end='')
+            print('##' if x else '  ', end='')
         print()
 
 inp = ''.join(open('input.txt'))
