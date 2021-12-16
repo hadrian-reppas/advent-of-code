@@ -86,11 +86,11 @@ def parse_equal_to(stack):
 inp, = open('input.txt')
 
 bin = bin(int(inp, 16))[2:]
-while len(bin) % 4 != 0:
-    bin = '0' + bin
 
 stack = []
 for c in bin[::-1]:
     stack.append(c == '1')
+while len(stack) % 4 != 0:
+    stack.append(False)
 
 print(parse(stack))

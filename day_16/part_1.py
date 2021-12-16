@@ -24,8 +24,7 @@ def parse_literal(stack):
     return val
 
 def parse_operator(stack):
-    l_id = stack.pop()
-    if l_id:
+    if stack.pop():
         number = pop_int(stack, 11)
         for _ in range(number):
             parse(stack)
@@ -39,12 +38,12 @@ def parse_operator(stack):
 inp, = open('input.txt')
 
 bin = bin(int(inp, 16))[2:]
-while len(bin) % 4 != 0:
-    bin = '0' + bin
 
 stack = []
 for c in bin[::-1]:
     stack.append(c == '1')
+while len(stack) % 4 != 0:
+    stack.append(False)
 
 versions = []
 
