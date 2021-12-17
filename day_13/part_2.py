@@ -13,8 +13,8 @@ commands = [(line[11], int(line[13:])) for line in oth.split('\n')]
 
 arr = [[False for _ in range(2000)] for _ in range(2000)]
 
-for r, c in points:
-    arr[c][r] = True
+for x, y in points:
+    arr[y][x] = True
 
 for cmd in commands:
     arr = do(arr, cmd)
