@@ -1,4 +1,4 @@
-from part_1 import test, max_height
+from part_1 import test
 
 line, = open('input.txt')
 
@@ -7,10 +7,9 @@ y_range = line[line.rfind('=') + 1:]
 min_x, max_x = (int(n) for n in x_range.split('..'))
 min_y, max_y = (int(n) for n in y_range.split('..'))
 
-MAX_VY = 200 # pick your favorite number
 hits = 0
 
-for vy in range(MAX_VY, min_y - 1, -1):
+for vy in range(-min_y, min_y - 1, -1):
     for vx in range(max_x + 1):
         hits += test(vx, vy, min_x, max_x, min_y, max_y)
 
