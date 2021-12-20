@@ -31,7 +31,7 @@ def diff(a):
             d[s] = x, y
     return d
 
-def align(a_points, b_points, scanners):
+def align(a_points, b_points):
     a_diff = diff(a_points)
     a_diff_set = set(a_diff)
     for b_rot in rots(b_points):
@@ -42,40 +42,32 @@ def align(a_points, b_points, scanners):
             a_point = a_diff[i][0]
             b_point = b_diff[i][0]
             offset = sub(a_point, b_point)
-            scanners.append(offset)
-            return [add(x, offset) for x in b_rot]
+            return [add(x, offset) for x in b_rot], offset
     return False
 
-def align_all(data, scanners=[]):
+def align_all(data):
     points = set(data[0])
-    todo = []
-    scanners.append((0, 0, 0))
-
-    for pts in data[1:]:
-        anchor_points = tuple(points)
-        aligned = align(anchor_points, pts, scanners)
-        if aligned is False:
-            todo.append(pts)
-        else:
-            points |= set(aligned)
+    todo = data[1:]
+    scanners = [(0, 0, 0)]
 
     while todo:
         pts = todo.pop(0)
         anchor_points = tuple(points)
-        aligned = align(anchor_points, pts, scanners)
+        aligned = align(anchor_points, pts)
         if aligned is False:
             todo.append(pts)
         else:
-            points |= set(aligned)
+            points |= set(aligned[0])
+            scanners.append(aligned[1])
     
-    return points
+    return points, scanners
 
 def main():
     inp = ''.join(open('input.txt'))
     data = [[tuple(int(n) for n in line.split(',')) for line in s.split('\n')[1:]]
                  for s in inp.split('\n\n')]
     
-    points = align_all(data)
+    points, _ = align_all(data)
     print(len(points))
 
 if __name__ == '__main__':
