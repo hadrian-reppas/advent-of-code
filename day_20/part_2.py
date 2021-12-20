@@ -1,8 +1,7 @@
 import numpy as np
 from part_1 import step
 
-inp = ''.join(open(('input.txt')))
-alg, board = inp.split('\n\n')
+alg, board = ''.join(open(('input.txt'))).split('\n\n')
 arr = np.array([[c == '#' for c in row] for row in board.split('\n')])
 rule = np.array([c == '#' for c in alg])
 
