@@ -9,7 +9,7 @@ def xslice(arr, col):
     return left, right
 
 def arr_or(a, b):
-    return [[x or y for x, y in zip(ar, br, strict=True)] for ar, br in zip(a, b, strict=True)]
+    return [[x or y for x, y in zip(ar, br)] for ar, br in zip(a, b)]
 
 def do(arr, cmd):
     match cmd:
@@ -26,8 +26,8 @@ def main():
 
     arr = [[False for _ in range(2000)] for _ in range(2000)]
 
-    for r, c in points:
-        arr[c][r] = True
+    for x, y in points:
+        arr[y][x] = True
 
     arr = do(arr, commands[0])
 

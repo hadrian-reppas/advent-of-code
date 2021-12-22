@@ -21,9 +21,9 @@ for i in range(rows):
             k = add_edge(G, (i, j), (i - 1, j), nums[i - 1][j], k)
         if j > 0:
             k = add_edge(G, (i, j), (i, j - 1), nums[i][j - 1], k)
-        if i < rows - 1: # i < 5*rows - 1:
+        if i < rows - 1:
             k = add_edge(G, (i, j), (i + 1, j), nums[i + 1][j], k)
-        if j < cols - 1: # j < 5*cols - 1:
+        if j < cols - 1:
             k = add_edge(G, (i, j), (i, j + 1), nums[i][j + 1], k)
 
 def bfs(G, start, end):

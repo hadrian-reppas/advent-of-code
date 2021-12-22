@@ -5,7 +5,7 @@ class num:
         self.left = left
         self.right = right
     def __add__(self, other):
-        return num(self, other).reduce()
+        return num(self.copy(), other.copy()).reduce()
     def __radd__(self, other):
         return self
     def reduce(self):

@@ -9,10 +9,10 @@ for line in inp.split('\n'):
             counts[i] += 1
     n += 1
 
-gamma_s = ''.join('1' if counts[i] > n - counts[i] else '0' for i in range(12))
+gamma_s = ''.join('1' if c > n - c else '0' for c in counts)
 gamma = int(gamma_s, 2)
 
-epsilon_s = ''.join('0' if counts[i] > n - counts[i] else '1' for i in range(12))
+epsilon_s = ''.join('0' if c > n - c else '1' for c in counts)
 epsilon = int(epsilon_s, 2)
 
 print(gamma*epsilon)

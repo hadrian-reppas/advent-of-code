@@ -4,7 +4,7 @@ def dist(nums, n):
 nums = [int(n) for n in next(open('input.txt')).split(',')]
 
 min_fuel = float('inf')
-for i in range(1877):
+for i in range(max(nums)):
     min_fuel = min(dist(nums, i), min_fuel)
 
 print(min_fuel)

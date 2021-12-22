@@ -1,4 +1,4 @@
-from part_1 import *
+from part_1 import do
 
 def print_arr(arr):
     for row in arr:

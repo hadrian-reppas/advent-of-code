@@ -13,10 +13,15 @@ def mappings():
     for perm in permutations(letters):
         yield {c: p for c, p in zip(letters, perm)}
 
-valid_mapping = lambda mapping, left: all(is_num(mapping, x) for x in left)
-is_num = lambda mapping, x: frozenset(mapping[c] for c in x) in nums
-get_val = lambda mapping, right: int(''.join(str(apply_mapping(mapping, x)) for x in right))
-apply_mapping = lambda mapping, x: nums[frozenset(mapping[c] for c in x)]
+def valid_mapping(mapping, left):
+    return all(is_num(mapping, segs) for segs in left)
+def is_num(mapping, segs):
+    return frozenset(mapping[c] for c in segs) in nums
+
+def get_val(mapping, right):
+    return int(''.join(str(apply_mapping(mapping, segs)) for segs in right))
+def apply_mapping(mapping, segs):
+    return nums[frozenset(mapping[c] for c in segs)]
 
 def decode(line):
     left, right = line

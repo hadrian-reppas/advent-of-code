@@ -17,9 +17,13 @@ def rots(points):
 
 def sub(a, b):
     return tuple(x - y for x, y in zip(a, b))
-
 def add(a, b):
     return tuple(x + y for x, y in zip(a, b))
+def cmp(a, b):
+    for x, y in zip(a, b):
+        if x != y:
+            return x - y
+    assert False
 
 def diff(a):
     d = {}
@@ -28,7 +32,8 @@ def diff(a):
             if x is y: continue
             s = sub(x, y)
             assert s not in d
-            d[s] = x, y
+            if cmp(x, y) > 0:
+                d[s] = x, y
     return d
 
 def align(a_points, b_points):
@@ -37,7 +42,7 @@ def align(a_points, b_points):
     for b_rot in rots(b_points):
         b_diff = diff(b_rot)
         intersect = a_diff_set & set(b_diff)
-        if len(intersect) >= 24:
+        if len(intersect) >= 12:
             i, *_ = intersect
             a_point = a_diff[i][0]
             b_point = b_diff[i][0]
