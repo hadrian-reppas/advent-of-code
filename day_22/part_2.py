@@ -5,6 +5,8 @@ x_coords = sorted([x for _, ((x, _), _, _) in regions] + [x + 1 for _, ((_, x), 
 y_coords = sorted([y for _, (_, (y, _), _) in regions] + [y + 1 for _, (_, (_, y), _) in regions])
 z_coords = sorted([z for _, (_, _, (z, _)) in regions] + [z + 1 for _, (_, _, (_, z)) in regions])
 
+# this is really slow, ~10 minutes on my machine with CPython.
+# you can find a C++ implementation that takes ~20 seconds in the misc directory
 on = 0
 for i, (x_min, x_max) in enumerate(zip(x_coords, x_coords[1:])):
     print(str(i).rjust(4) + f"/{len(x_coords)}")
