@@ -94,9 +94,6 @@ them so the current code will likely fail silently.
 
 class inp_range:
     def __init__(self, i, lo=1, hi=9, not_=set()):
-        assert 1 <= lo <= 9
-        assert 1 <= hi <= 9
-        assert lo <= hi
         self.i = i
         self.lo = lo
         self.hi = hi
@@ -116,8 +113,6 @@ class lin_inp:
         self.inps = inps
     def add(self, coeff, inp):
         return lin_inp(self.const, self.coeffs + (coeff,), self.inps + (inp,))
-    def add_offset(self, inp_o):
-        return lin_inp(self.const + inp_o.const, self.coeffs + (1,), self.inps + (inp_o.i,))
     def add_const(self, const):
         return lin_inp(self.const + const, self.coeffs, self.inps)
     def mod_26(self):
@@ -129,7 +124,6 @@ class lin_inp:
                 new_coeffs.append(coeff % 26)
                 new_inps.append(inp)
         without_mod = lin_inp(new_const, tuple(new_coeffs), tuple(new_inps))
-        assert 0 <= without_mod.min() and without_mod.max() < 26
         return without_mod
     def div_26(self):
         new_coeffs = []
@@ -137,7 +131,6 @@ class lin_inp:
         one_inp = None
         for coeff, inp in zip(self.coeffs, self.inps):
             if coeff > 1:
-                assert coeff % 26 == 0
                 new_coeffs.append(coeff//26)
                 new_inps.append(inp)
             else:
@@ -145,30 +138,17 @@ class lin_inp:
         if one_inp:
             lo = (self.const + one_inp.lo)//26
             hi = (self.const + one_inp.hi)//26
-            assert lo == hi
             return lin_inp(lo, tuple(new_coeffs), tuple(new_inps))
         return lin_inp(self.const//26, tuple(new_coeffs), tuple(new_inps))
     def times_26(self):
         new_const = 26*self.const
         new_coeffs = tuple(26*c for c in self.coeffs)
         return lin_inp(new_const, new_coeffs, self.inps)
-    def min(self):
-        x = self.const
-        for coeff, inp in zip(self.coeffs, self.inps):
-            x += coeff*inp.lo
-        return x
-    def max(self):
-        x = self.const
-        for coeff, inp in zip(self.coeffs, self.inps):
-            x += coeff*inp.hi
-        return x
     def overlap(self, other):
-        assert isinstance(other, inp_range)
         if len(self.coeffs) == 0:
             if other.lo <= self.const <= other.hi:
                 return None, inp_range(self.const, self.const)
             return None
-        assert self.coeffs[0] == 1
         lo = max(self.inps[0].lo, other.lo - self.const)
         hi = min(self.inps[0].hi, other.hi - self.const)
         if lo <= hi:
@@ -186,18 +166,15 @@ def analyze(prev_z, index, a_list, b_list, c_list):
     next_inp_st_condition_false = z_mod_26_plus_b.overlap(next_inp)
     z_prev_div_a = prev_z.div_26() if a_list[index] == 26 else prev_z
     if next_inp_st_condition_false is None:
-        # condition is not possible for all possible next_inp
         z = z_prev_div_a.times_26().add(1, next_inp).add_const(c_list[index])
         x = analyze(z, index + 1, a_list, b_list, c_list)
         if isinstance(x, list):
             return x
     else:
-        # condition is possible for some next_inp
-        # next_inp_st_condition_false represents the subset of next_inp that makes condition false
         z_condition_false = z_prev_div_a.times_26().add(1, next_inp_st_condition_false).add_const(c_list[index])
         z_condition_true = z_prev_div_a
         x = analyze(z_condition_false, index + 1, a_list, b_list, c_list)
-        if isinstance(x, list): # this is never true for my input
+        if isinstance(x, list):
             n = next_inp_st_condition_false
             m, = n.not_
             # x.append(f'i{n.i} != i{m.i.i} + {m.const}')

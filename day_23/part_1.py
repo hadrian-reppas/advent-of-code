@@ -104,17 +104,6 @@ def get_all_moves(config):
         for (i_f, j_f), cost in get_moves(config, i_i, j_i):
             yield (i_i, j_i), (i_f, j_f), cost
 
-def print_config(config):
-    print('#############\n#', end='')
-    print('.' if config[0][0] is None else config[0][0], end='')
-    print('.' if config[0][1] is None else config[0][1], end='.')
-    print('.'.join('.' if x is None else x for x in config[0][2:5]), end='.')
-    print('.' if config[0][5] is None else config[0][5], end='')
-    print('.' if config[0][6] is None else config[0][6], end='#\n')
-    print('###', end='')
-    print('#'.join('.' if x is None else x for x in config[1]), end='###\n  #')
-    print('#'.join('.' if x is None else x for x in config[2]), end='#\n  #########\n')
-
 def search(starting_config, final):
     costs = {}
     stack = deque([(starting_config, 0)])
@@ -128,7 +117,6 @@ def search(starting_config, final):
                 continue
             costs[new_config] = new_cost
             stack.append((new_config, new_cost))
-        print(len(stack), len(costs), costs[final] if final in costs else None, sep='\t')
     return costs[final]
 
 def main():
