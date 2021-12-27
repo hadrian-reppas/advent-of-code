@@ -49,7 +49,7 @@ that the `z % 26 + b == input` test will be `False` because `10 <= z <= 18`, so
 `z % 26 + b` is between `21` and `29`, which is greater than any possible input.
 
 But if `inputs[4] == inputs[3] - 8`, the condition evaluates to `True`. So our
-analysis branches: one case has `inputs[4] == inputs[3] - 8` and the other where
+analysis branches: one case has `inputs[4] == inputs[3] - 8` and the other has
 `inputs[4] != inputs[3] - 8`.
 
 The three classes I define keep track of these possibilities. In the first case

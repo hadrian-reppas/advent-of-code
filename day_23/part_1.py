@@ -20,51 +20,24 @@ def enterable(config, index):
     return True
 
 def move(config, a, b, c, d):
-    assert config[a][b] is not None
-    assert config[c][d] is None
-    new_config = []
-    for i, row in enumerate(config):
-        new_row = []
-        for j, x in enumerate(row):
-            if (i, j) == (a, b):
-                new_row.append(None)
-            elif (i, j) == (c, d):
-                new_row.append(config[a][b])
-            else:
-                new_row.append(x)
-        new_config.append(tuple(new_row))
-    return tuple(new_config)
+    new_config = list(list(row) for row in config)
+    new_config[c][d] = new_config[a][b]
+    new_config[a][b] = None
+    return tuple(tuple(row) for row in new_config)
 
 def get_moves(config, i, j):
-    assert config[i][j] is not None
     amphi = config[i][j]
     if i == 0:
         # have to move into a room
         cost = 0
         for new_j in range(j, 1, -1):
             if new_j != j and config[0][new_j] is not None: break
-            if new_j - 2 == room(amphi) and enterable(config, room(amphi)):
-                room_cost = cost + move_cost[amphi]
-                new_i = 1
-                while new_i < len(config) and config[new_i][new_j - 2] is None:
-                    new_i += 1
-                    room_cost += move_cost[amphi]
-                new_i -= 1
-                yield (new_i, new_j - 2), room_cost
-                return
+            yield from room_moves(config, new_j, amphi, cost, False)
             cost += move_cost[amphi]*(1 if new_j in [1, 6] else 2)
         cost = 0
         for new_j in range(j, 7):
             if new_j != j and config[0][new_j] is not None: break
-            if new_j - 1 == room(amphi) and enterable(config, room(amphi)):
-                room_cost = cost + move_cost[amphi]
-                new_i = 1
-                while new_i < len(config) and config[new_i][new_j - 1] is None:
-                    new_i += 1
-                    room_cost += move_cost[amphi]
-                new_i -= 1
-                yield (new_i, new_j - 1), room_cost
-                return
+            yield from room_moves(config, new_j, amphi, cost, True)
             cost += move_cost[amphi]*(1 if new_j in [0, 5] else 2)
     else:
         if i > 1 and config[i - 1][j] is not None: return
@@ -75,29 +48,27 @@ def get_moves(config, i, j):
         for new_j in range(hallway_j, -1, -1):
             if config[0][new_j] is not None: break
             yield (0, new_j), cost
-            if new_j - 2 == room(amphi) and enterable(config, room(amphi)):
-                room_cost = cost + move_cost[amphi]
-                new_i = 1
-                while new_i < len(config) and config[new_i][new_j - 2] is None:
-                    new_i += 1
-                    room_cost += move_cost[amphi]
-                new_i -= 1
-                yield (new_i, new_j - 2), room_cost
+            yield from room_moves(config, new_j, amphi, cost, False)
             cost += move_cost[amphi]*(1 if new_j == 1 else 2)
         hallway_j = j + 2 # for looking right
         cost = to_hallway_cost
         for new_j in range(hallway_j, 7):
             if config[0][new_j] is not None: break
             yield (0, new_j), cost
-            if new_j - 1 == room(amphi) and enterable(config, room(amphi)):
-                room_cost = cost + move_cost[amphi]
-                new_i = 1
-                while new_i < len(config) and config[new_i][new_j - 1] is None:
-                    new_i += 1
-                    room_cost += move_cost[amphi]
-                new_i -= 1
-                yield (new_i, new_j - 1), room_cost
+            yield from room_moves(config, new_j, amphi, cost, True)
             cost += move_cost[amphi]*(1 if new_j == 5 else 2)
+
+def room_moves(config, j, amphi, cost, looking_right):
+    offset = 1 if looking_right else 2
+    if j - offset != room(amphi): return
+    if not enterable(config, room(amphi)): return
+    room_cost = cost + move_cost[amphi]
+    new_i = 1
+    while new_i < len(config) and config[new_i][j - offset] is None:
+        new_i += 1
+        room_cost += move_cost[amphi]
+    new_i -= 1
+    yield (new_i, j - offset), room_cost
 
 def get_all_moves(config):
     for i_i, j_i in amphipod_locs(config):
@@ -106,9 +77,9 @@ def get_all_moves(config):
 
 def search(starting_config, final):
     costs = {}
-    stack = deque([(starting_config, 0)])
-    while stack:
-        config, cost = stack.popleft()
+    queue = deque([(starting_config, 0)])
+    while queue:
+        config, cost = queue.popleft()
         if config in costs and costs[config] < cost: continue
         for (i_i, j_i), (i_f, j_f), move_cost in get_all_moves(config):
             new_config = move(config, i_i, j_i, i_f, j_f)
@@ -116,7 +87,7 @@ def search(starting_config, final):
             if new_config in costs and new_cost >= costs[new_config]:
                 continue
             costs[new_config] = new_cost
-            stack.append((new_config, new_cost))
+            queue.append((new_config, new_cost))
     return costs[final]
 
 def main():
